@@ -1,0 +1,19 @@
+# Render blueprint for the Jarvis planning server (free plan). Push this folder to GitHub, then on render.com:
+# New > Blueprint > pick the repo. Fill in OPENROUTER_API_KEY (and JARVIS_CLIENT_TOKEN if you use one) when asked.
+services:
+  - type: web
+    name: jarvis-server
+    runtime: python
+    plan: free
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: uvicorn server.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: JARVIS_CLIENT_TOKEN
+        sync: false
+      - key: JARVIS_ALLOWED_MODELS
+        value: openai/gpt-6-luna,anthropic/claude-haiku-5.5,google/gemini-2.5-flash
